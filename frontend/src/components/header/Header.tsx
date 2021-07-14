@@ -4,11 +4,13 @@ import { AuthButtons } from "./AuthButtons";
 
 export const Header: React.FC = () => {
   return (
-    <Navbar>
-      <Container>
-        <Navbar.Brand>React Notes App</Navbar.Brand>
-        <AuthButtons />
-      </Container>
-    </Navbar>
+    <header>
+      <Navbar fixed="top">
+        <Container>
+          <Navbar.Brand>React Notes App</Navbar.Brand>
+          <AuthButtons />
+        </Container>
+      </Navbar>
+    </header>
   );
 };
