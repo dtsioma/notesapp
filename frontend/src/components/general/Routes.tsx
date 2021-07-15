@@ -12,6 +12,11 @@ export const Routes: React.FC = () => {
     <Switch>
       <Route exact path="/" component={isAuthenticated ? Notes : Home} />
       <GuardedRoute exact path="/notes" component={Notes} />
+      <GuardedRoute
+        exact
+        path="/notes/create"
+        render={() => <h3>Create new note here</h3>}
+      />
       <GuardedRoute exact path="/notes/:id" component={NoteDetail} />
     </Switch>
   );
