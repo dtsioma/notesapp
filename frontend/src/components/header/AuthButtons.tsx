@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import { AuthContext } from "../../App";
 import { LoginButton } from "./LoginButton";
 import { LogoutButton } from "./LogoutButton";
 import { SignupButton } from "./SignupButton";
 
 export const AuthButtons: React.FC = () => {
-  const isAuthenticated = false;
+  const { isAuthenticated } = useContext(AuthContext);
 
   let buttons = (
     <React.Fragment>

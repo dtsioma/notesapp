@@ -1,0 +1,17 @@
+.Notes {
+  margin-top: 50px;
+}
+
+.NoteText {
+  line-height: 1.2em;
+  height: 3.6em;
+}
+
+.CardLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.CardLink:hover {
+  color: inherit;
+}

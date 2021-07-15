@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Container } from "react-bootstrap";
+import { AuthContext } from "../../App";
 import { AuthButtons } from "./AuthButtons";
 
 export const Header: React.FC = () => {
+  const { isAuthenticated } = useContext(AuthContext);
   return (
     <header>
-      <Navbar fixed="top">
+      <Navbar fixed={!isAuthenticated ? "top" : undefined}>
         <Container>
           <Navbar.Brand>React Notes App</Navbar.Brand>
           <AuthButtons />
