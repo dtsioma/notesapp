@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { Route, Switch } from "react-router-dom";
 import { AuthContext } from "../../App";
 import { Home } from "../../views/Home";
-import { NoteDetail } from "../../views/NoteDetail";
-import { Notes } from "../../views/Notes";
+import { NoteDetail } from "../../views/notes/NoteDetail";
+import { Notes } from "../../views/notes/Notes";
 import { GuardedRoute } from "./GuardedRoute";
 
 export const Routes: React.FC = () => {

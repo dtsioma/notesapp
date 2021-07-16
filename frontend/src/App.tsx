@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Routes } from "./components/general/Routes";
 import { Header } from "./components/header/Header";
 import "./App.css";

@@ -1,0 +1,10 @@
+.Title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  border-color: transparent;
+}
+
+.Title[readonly],
+.Textarea[readonly] {
+  background-color: white;
+}
