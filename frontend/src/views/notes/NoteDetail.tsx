@@ -31,7 +31,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
 
   const [title, setTitle] = useState<string>();
   const [text, setText] = useState<string>();
-  const [sharedWith, setSharedWith] = useState<UserInShared[]>();
+  const [sharedWith, setSharedWith] = useState<UserInShared[]>([]);
   const [noteContent, setNoteContent] = useState<Note | null>(null);
 
   // Get Note object
@@ -143,7 +143,10 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
                     >
                       {sidebarDate}
                     </ListGroup.Item>
-                    <ListGroup.Item onClick={() => setShowShareModal(true)}>
+                    <ListGroup.Item
+                      onClick={() => setShowShareModal(true)}
+                      style={{ cursor: "pointer" }}
+                    >
                       {sharedWith && sharedWith.length ? (
                         <React.Fragment>
                           Shared with:{" "}
@@ -233,7 +236,8 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
           console.log("perms saved");
           setShowShareModal(false);
         }}
-        sharedWith={sharedWith || []}
+        sharedWith={sharedWith}
+        setSharedWith={setSharedWith}
       />
     </main>
   );
