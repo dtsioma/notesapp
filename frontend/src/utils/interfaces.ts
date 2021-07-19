@@ -14,7 +14,7 @@ export interface Note {
   text: string;
   dateCreated: string;
   dateUpdated: string;
-  sharedWith: UserInShared[];
+  // sharedWith: UserInShared[];
 }
 
 export interface MatchParams {

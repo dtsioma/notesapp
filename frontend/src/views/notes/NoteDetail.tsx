@@ -13,11 +13,10 @@ import { RouteComponentProps } from "react-router-dom";
 import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
 import TimeAgo from "react-timeago";
-import { MatchParams, Note, UserInShared } from "../../utils/interfaces";
+import { MatchParams, Note } from "../../utils/interfaces";
 import deepEqual from "../../utils/deepEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
-import { ShareModal } from "../../components/notes/ShareModal";
 
 interface NoteDetailProps extends RouteComponentProps<MatchParams> {}
 
@@ -27,11 +26,9 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [showCCModal, setShowCCModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [showShareModal, setShowShareModal] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>();
   const [text, setText] = useState<string>();
-  const [sharedWith, setSharedWith] = useState<UserInShared[]>([]);
   const [noteContent, setNoteContent] = useState<Note | null>(null);
 
   // Get Note object
@@ -41,7 +38,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
     setNoteContent(note);
     setTitle(note.title);
     setText(note.text);
-    setSharedWith(note.sharedWith);
   }, [noteId]);
 
   // check if Note is edited
@@ -143,23 +139,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
                     >
                       {sidebarDate}
                     </ListGroup.Item>
-                    <ListGroup.Item
-                      onClick={() => setShowShareModal(true)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {sharedWith && sharedWith.length ? (
-                        <React.Fragment>
-                          Shared with:{" "}
-                          {sharedWith.map((u, idx) => (
-                            <Badge key={idx} className="me-1 bg-secondary">
-                              {u.username}
-                            </Badge>
-                          ))}
-                        </React.Fragment>
-                      ) : (
-                        "Share this note"
-                      )}
-                    </ListGroup.Item>
                   </ListGroup>
                   <Card.Body>
                     <div className="d-grid gap-2">
@@ -226,18 +205,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
           console.log("note deleted");
           setShowDeleteModal(false);
         }}
-      />
-      <ShareModal
-        show={showShareModal}
-        handleClose={() => {
-          setShowShareModal(false);
-        }}
-        handleSubmit={() => {
-          console.log("perms saved");
-          setShowShareModal(false);
-        }}
-        sharedWith={sharedWith}
-        setSharedWith={setSharedWith}
       />
     </main>
   );

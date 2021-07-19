@@ -24,11 +24,6 @@ export const myNotes: Note[] = [
     text: "Hello!\n\nThis is my first note!",
     dateCreated: "Wed Jul 14 2021 17:31:25 GMT-0700 (PDT)",
     dateUpdated: "Wed Jul 14 2021 20:49:08 GMT-0700 (PDT)",
-    sharedWith: [
-      { username: "johndoe" },
-      { username: "mary_smith" },
-      { username: "christianbale" },
-    ],
   },
   {
     id: 2,
@@ -36,7 +31,6 @@ export const myNotes: Note[] = [
     text: "Ok\n\nhere we go\n\nanother note by me",
     dateCreated: "Wed Jul 14 2021 17:35:23 GMT-0700 (PDT)",
     dateUpdated: "Wed Jul 14 2021 17:35:23 GMT-0700 (PDT)",
-    sharedWith: [],
   },
   {
     id: 3,
@@ -44,48 +38,10 @@ export const myNotes: Note[] = [
     text: "Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, ab. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores vero dolorum similique provident ducimus natus, error sunt quae est sit!!\n\nThis is my first note!",
     dateCreated: "Wed Jul 14 2021 17:35:44 GMT-0700 (PDT)",
     dateUpdated: "Wed Jul 14 2021 17:35:44 GMT-0700 (PDT)",
-    sharedWith: [],
-  },
-];
-
-export const sharedNotes: Note[] = [
-  {
-    id: 4,
-    title: "First note",
-    text: `Hello!
-    This is my first note!`,
-    dateCreated: "Wed Jul 14 2021 17:31:25 GMT-0700 (PDT)",
-    dateUpdated: "Wed Jul 14 2021 17:31:25 GMT-0700 (PDT)",
-    sharedWith: [],
-  },
-  {
-    id: 5,
-    title: "Another note",
-    text: `Ok,
-    here we go,
-    another note by me`,
-    dateCreated: "Wed Jul 14 2021 17:35:23 GMT-0700 (PDT)",
-    dateUpdated: "Wed Jul 14 2021 17:35:23 GMT-0700 (PDT)",
-    sharedWith: [],
-  },
-  {
-    id: 6,
-    title: "This is my first note",
-    text: `Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, ab. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores vero dolorum similique provident ducimus natus, error sunt quae est sit!!
-    This is my first note!`,
-    dateCreated: "Wed Jul 14 2021 17:35:44 GMT-0700 (PDT)",
-    dateUpdated: "Wed Jul 14 2021 17:35:44 GMT-0700 (PDT)",
-    sharedWith: [],
   },
 ];
 
 myNotes.sort((a: Note, b: Note) => {
-  if (Date.parse(b.dateUpdated) > Date.parse(a.dateUpdated)) return 1;
-  else if (Date.parse(a.dateUpdated) > Date.parse(b.dateUpdated)) return -1;
-  else return 0;
-});
-
-sharedNotes.sort((a: Note, b: Note) => {
   if (Date.parse(b.dateUpdated) > Date.parse(a.dateUpdated)) return 1;
   else if (Date.parse(a.dateUpdated) > Date.parse(b.dateUpdated)) return -1;
   else return 0;
@@ -143,41 +99,6 @@ export const Notes: React.FC = () => {
               ))
             : createNoteCard}
         </Row>
-        {sharedNotes.length !== 0 ? (
-          <React.Fragment>
-            <Row className="mb-4">
-              <h2>Shared with you</h2>
-            </Row>
-            <Row className="mb-5">
-              {sharedNotes.map((note, idx) => (
-                <Col key={idx} className="col-3">
-                  <Card border="success">
-                    <Link to={`/notes/${note.id}`} className={styles.CardLink}>
-                      <Card.Body>
-                        <Card.Title>{note.title}</Card.Title>
-                        <Card.Subtitle className="text-muted mb-3">
-                          <TimeAgo date={note.dateUpdated} />
-                        </Card.Subtitle>
-                        <Card.Text>
-                          <ClampLines
-                            id={`note${idx}-text`}
-                            text={note.text.replace("\n", "")}
-                            lines={3}
-                            ellipsis="..."
-                            buttons={false}
-                            className={styles.NoteText}
-                            innerElement={"p"}
-                          />
-                        </Card.Text>
-                        <Button variant="success">Open</Button>
-                      </Card.Body>
-                    </Link>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </React.Fragment>
-        ) : null}
       </Container>
     </main>
   );
