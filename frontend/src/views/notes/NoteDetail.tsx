@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Badge,
   Button,
   Card,
   Col,
@@ -14,7 +13,7 @@ import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
 import TimeAgo from "react-timeago";
 import { MatchParams, Note } from "../../utils/interfaces";
-import deepEqual from "../../utils/deepEqual";
+import { shallowEqual } from "../../utils/areObjectsEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
 
@@ -45,7 +44,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
     if (noteContent === null) {
       throw new Error("Note content is null");
     }
-    const result = !deepEqual(
+    const result = !shallowEqual(
       {
         title: noteContent.title,
         text: noteContent.text,
@@ -70,7 +69,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
       console.log(true);
       setIsEdited(true);
     }
-  }, [title, text]);
+  }, [title, text, noteContent]);
 
   // Stitch Edited/Created/Loading  in sidebar
   let sidebarDate: React.ReactElement | string = "Loading...";
@@ -142,21 +141,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
                   </ListGroup>
                   <Card.Body>
                     <div className="d-grid gap-2">
-                      <Button
-                        variant={editingMode ? "success" : "warning"}
-                        onClick={
-                          editingMode
-                            ? () => {
-                                console.log("saved successfully");
-                              }
-                            : () => {
-                                setEditingMode(true);
-                              }
-                        }
-                        disabled={editingMode && !isEdited}
-                      >
-                        {editingMode ? "Save" : "Edit"}
-                      </Button>
                       {editingMode ? (
                         <Button
                           variant="warning"
@@ -169,6 +153,28 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
                           }}
                         >
                           Cancel changes
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="warning"
+                          onClick={() => {
+                            setEditingMode(true);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      )}
+
+                      {editingMode ? (
+                        <Button
+                          variant="success"
+                          onClick={() => {
+                            setEditingMode(false);
+                            console.log("saved successfuly");
+                          }}
+                          disabled={!isEdited}
+                        >
+                          Save
                         </Button>
                       ) : (
                         <Button
