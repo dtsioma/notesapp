@@ -1,13 +1,19 @@
+import { QueryResult } from "@apollo/client";
 import React, { useContext } from "react";
 import { Navbar, Container } from "react-bootstrap";
-import { AuthContext } from "../../App";
+import { useIsLoggedInQuery } from "../../generated/graphql";
 import { AuthButtons } from "./AuthButtons";
 
 export const Header: React.FC = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { data, loading }: QueryResult = useIsLoggedInQuery();
+
+  if (loading) {
+    return <div></div>;
+  }
+
   return (
     <header>
-      <Navbar fixed={!isAuthenticated ? "top" : undefined}>
+      <Navbar fixed={!loading && !data.isLoggedIn ? "top" : undefined}>
         <Container>
           <Navbar.Brand>React Notes App</Navbar.Brand>
           <AuthButtons />

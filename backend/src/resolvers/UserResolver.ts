@@ -24,7 +24,7 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
   // return my user
-  @Query(() => UserResponse, { nullable: true })
+  @Query(() => UserResponse)
   async me(@Ctx() { req }: any) {
     if (!req.userId) {
       return null;
@@ -42,8 +42,16 @@ export class UserResolver {
     };
   }
 
+  @Query(() => Boolean)
+  isLoggedIn(@Ctx() { req }: any) {
+    if (!req.userId) {
+      return false;
+    }
+    return true;
+  }
+
   // return all users
-  @Query(() => [UserResponse], { nullable: true })
+  @Query(() => [UserResponse])
   async users() {
     const users = await User.find();
     if (!users) {
@@ -53,7 +61,7 @@ export class UserResolver {
   }
 
   // get user data
-  @Query(() => UserResponse, { nullable: true })
+  @Query(() => UserResponse)
   async user(@Arg("id") id: number) {
     const user = await User.findOne({ where: { id } });
     if (!user) {
@@ -82,7 +90,7 @@ export class UserResolver {
   }
 
   // login user
-  @Mutation(() => UserResponse, { nullable: true })
+  @Mutation(() => UserResponse)
   async login(
     @Arg("email") email: string,
     @Arg("password") password: string,
@@ -90,12 +98,12 @@ export class UserResolver {
   ) {
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return null;
+      throw new Error("User not found");
     }
 
     const valid = await compare(password, user.password);
     if (!valid) {
-      return null;
+      throw new Error("Password is incorrect");
     }
 
     const { accessToken, refreshToken } = createTokens(user);

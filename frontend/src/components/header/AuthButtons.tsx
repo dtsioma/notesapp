@@ -1,13 +1,16 @@
+import { QueryResult } from "@apollo/client";
 import React, { useContext } from "react";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import { AuthContext } from "../../App";
+import { useIsLoggedInQuery } from "../../generated/graphql";
 import { LoginButton } from "./LoginButton";
 import { LogoutButton } from "./LogoutButton";
 import { SignupButton } from "./SignupButton";
 
 export const AuthButtons: React.FC = () => {
-  // const { isAuthenticated } = useContext(AuthContext);
-  const isAuthenticated = false;
+  const {
+    data: { isLoggedIn },
+    loading,
+  }: QueryResult = useIsLoggedInQuery();
 
   let buttons = (
     <React.Fragment>
@@ -16,7 +19,11 @@ export const AuthButtons: React.FC = () => {
     </React.Fragment>
   );
 
-  if (isAuthenticated) {
+  if (loading) {
+    return <div></div>;
+  }
+
+  if (!loading && isLoggedIn) {
     buttons = <LogoutButton />;
   }
 

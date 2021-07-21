@@ -31,7 +31,7 @@ export type Mutation = {
   updateNote: Note;
   deleteNote: DeleteResponse;
   register: Scalars['Boolean'];
-  login?: Maybe<UserResponse>;
+  login: UserResponse;
   logout: Scalars['Boolean'];
   invalidateTokens: Scalars['Boolean'];
 };
@@ -87,9 +87,10 @@ export type Query = {
   hello: Scalars['String'];
   notes: Array<Note>;
   getNoteByID: Note;
-  me?: Maybe<UserResponse>;
-  users?: Maybe<Array<UserResponse>>;
-  user?: Maybe<UserResponse>;
+  me: UserResponse;
+  isLoggedIn: Scalars['Boolean'];
+  users: Array<UserResponse>;
+  user: UserResponse;
 };
 
 
@@ -108,6 +109,28 @@ export type UserResponse = {
   email: Scalars['String'];
 };
 
+export type IsLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IsLoggedInQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'isLoggedIn'>
+);
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & Pick<UserResponse, 'id' | 'email'>
+  ) }
+);
+
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -121,13 +144,80 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = (
   { __typename?: 'Query' }
-  & { me?: Maybe<(
+  & { me: (
     { __typename?: 'UserResponse' }
     & Pick<UserResponse, 'id' | 'email'>
-  )> }
+  ) }
 );
 
 
+export const IsLoggedInDocument = gql`
+    query IsLoggedIn {
+  isLoggedIn
+}
+    `;
+
+/**
+ * __useIsLoggedInQuery__
+ *
+ * To run a query within a React component, call `useIsLoggedInQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsLoggedInQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsLoggedInQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useIsLoggedInQuery(baseOptions?: Apollo.QueryHookOptions<IsLoggedInQuery, IsLoggedInQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsLoggedInQuery, IsLoggedInQueryVariables>(IsLoggedInDocument, options);
+      }
+export function useIsLoggedInLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsLoggedInQuery, IsLoggedInQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsLoggedInQuery, IsLoggedInQueryVariables>(IsLoggedInDocument, options);
+        }
+export type IsLoggedInQueryHookResult = ReturnType<typeof useIsLoggedInQuery>;
+export type IsLoggedInLazyQueryHookResult = ReturnType<typeof useIsLoggedInLazyQuery>;
+export type IsLoggedInQueryResult = Apollo.QueryResult<IsLoggedInQuery, IsLoggedInQueryVariables>;
+export const LoginDocument = gql`
+    mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    id
+    email
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout
