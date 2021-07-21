@@ -6,7 +6,8 @@ import { LogoutButton } from "./LogoutButton";
 import { SignupButton } from "./SignupButton";
 
 export const AuthButtons: React.FC = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  // const { isAuthenticated } = useContext(AuthContext);
+  const isAuthenticated = false;
 
   let buttons = (
     <React.Fragment>

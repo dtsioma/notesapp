@@ -10,9 +10,16 @@ import cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
 import { User } from "./models/User";
 import { createTokens } from "./auth";
+import cors from 'cors'
 
 (async () => {
   const app = express();
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
   app.use(cookieParser());
 

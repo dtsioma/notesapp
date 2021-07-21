@@ -4,7 +4,7 @@ import { Header } from "./components/header/Header";
 import "./App.css";
 
 const authData = {
-  isAuthenticated: true,
+  isAuthenticated: false,
 };
 
 export const AuthContext = React.createContext(authData);

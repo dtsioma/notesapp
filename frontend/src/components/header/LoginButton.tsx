@@ -1,6 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 export const LoginButton: React.FC = () => {
-  return <Button variant="primary">Log In</Button>;
+  return (
+    <Link to="/login">
+      <Button variant="primary">Log In</Button>
+    </Link>
+  );
 };

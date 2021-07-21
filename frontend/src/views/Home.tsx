@@ -7,7 +7,7 @@ export const Home: React.FC = () => {
     <main className={styles.Home}>
       <Container>
         <Row className="justify-content-center">
-          <h1 className={styles.Heading}>Make a note. Share it.</h1>
+          <h1 className={styles.Heading}>Notes App</h1>
         </Row>
         <Row className="justify-content-center">
           <Button variant="primary" size="lg" className="w-auto mt-4">
