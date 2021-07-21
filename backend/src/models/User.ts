@@ -17,6 +17,6 @@ export class User extends BaseEntity {
   password: string;
 
   @Field(() => Int)
-  @Column()
+  @Column({ default: 0 })
   count: number;
 }
