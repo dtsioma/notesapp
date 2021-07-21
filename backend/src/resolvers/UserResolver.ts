@@ -109,6 +109,17 @@ export class UserResolver {
       count: user.count,
     };
   }
+
+  // logout user
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { res }: any) {
+    res.clearCookie("refresh-token");
+    res.clearCookie("access-token");
+
+    return true;
+  }
+
+  // invalidate tokens
   @Mutation(() => Boolean)
   async invalidateTokens(@Ctx() { req }: any) {
     if (!req.userId) {
