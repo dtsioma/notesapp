@@ -9,6 +9,7 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
+import { createTokens } from "../auth";
 import { User } from "../models/User";
 
 @ObjectType()
@@ -23,13 +24,14 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
   // return my user
-  @Query(() => UserResponse || null)
+  @Query(() => UserResponse, { nullable: true })
   async me(@Ctx() { req }: any) {
     if (!req.userId) {
       return null;
     }
 
     const user = await User.findOne(req.userId);
+    console.log(user);
     if (!user) {
       return null;
     }
@@ -41,7 +43,7 @@ export class UserResolver {
   }
 
   // return all users
-  @Query(() => [UserResponse])
+  @Query(() => [UserResponse], { nullable: true })
   async users() {
     const users = await User.find();
     if (!users) {
@@ -51,7 +53,7 @@ export class UserResolver {
   }
 
   // get user data
-  @Query(() => UserResponse)
+  @Query(() => UserResponse, { nullable: true })
   async user(@Arg("id") id: number) {
     const user = await User.findOne({ where: { id } });
     if (!user) {
@@ -80,7 +82,7 @@ export class UserResolver {
   }
 
   // login user
-  @Mutation(() => UserResponse)
+  @Mutation(() => UserResponse, { nullable: true })
   async login(
     @Arg("email") email: string,
     @Arg("password") password: string,
@@ -96,17 +98,7 @@ export class UserResolver {
       return null;
     }
 
-    const accessToken = sign(
-      { userId: user.id },
-      process.env.ACCESS_TOKEN_SECRET!,
-      { expiresIn: "15m" }
-    );
-
-    const refreshToken = sign(
-      { userId: user.id, count: user.count },
-      process.env.REFRESH_TOKEN_SECRET!,
-      { expiresIn: "7d" }
-    );
+    const { accessToken, refreshToken } = createTokens(user);
 
     res.cookie("refresh-token", refreshToken);
     res.cookie("access-token", accessToken);
@@ -116,5 +108,20 @@ export class UserResolver {
       email: user.email,
       count: user.count,
     };
+  }
+  @Mutation(() => Boolean)
+  async invalidateTokens(@Ctx() { req }: any) {
+    if (!req.userId) {
+      return false;
+    }
+
+    const user = await User.findOne(req.userId);
+    if (!user) {
+      return false;
+    }
+    user.count += 1;
+    await user.save();
+
+    return true;
   }
 }
