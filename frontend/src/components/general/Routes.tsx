@@ -1,8 +1,9 @@
 import { QueryResult } from "@apollo/client";
-import React, { useContext } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { Query, useIsLoggedInQuery } from "../../generated/graphql";
+import { useIsLoggedInQuery } from "../../generated/graphql";
 import { Login } from "../../views/auth/Login";
+import { SignUp } from "../../views/auth/SignUp";
 import { Home } from "../../views/Home";
 import { NoteDetail } from "../../views/notes/NoteDetail";
 import { Notes } from "../../views/notes/Notes";
@@ -23,6 +24,7 @@ export const Routes: React.FC = () => {
     <Switch>
       <Route exact path="/" component={data.isLoggedIn ? Notes : Home} />
       <AuthRoute exact path="/login" component={Login} />
+      <AuthRoute exact path="/sign-up" component={SignUp} />
       <GuardedRoute exact path="/notes" component={Notes} />
       <GuardedRoute
         exact

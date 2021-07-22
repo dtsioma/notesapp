@@ -7,7 +7,7 @@ export const SignupButton: React.FC<ButtonWithClassProps> = ({
   buttonClass,
 }) => {
   return (
-    <Link to="/signup">
+    <Link to="/sign-up">
       <Button variant="outline-primary" className={buttonClass}>
         Sign Up
       </Button>

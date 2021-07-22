@@ -8,17 +8,22 @@ export const Home: React.FC = () => {
     <main className={styles.Home}>
       <Container>
         <Row className="justify-content-center">
-          <h1 className={styles.Heading}>Notes App</h1>
+          <h1 className={styles.Heading}>Let's make some notes.</h1>
         </Row>
         <Row className="justify-content-center">
-          <Button variant="primary" size="lg" className="w-auto mt-4">
-            <Link
-              to="/login"
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
+          <Link
+            to="/login"
+            style={{
+              color: "inherit",
+              textDecoration: "none",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button variant="primary" size="lg" className="w-auto mt-4">
               Start Now
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </Row>
       </Container>
     </main>

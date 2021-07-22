@@ -7,10 +7,11 @@ import {
   MeDocument,
   MeQuery,
   useLoginMutation,
+  useRegisterMutation,
 } from "../../generated/graphql";
 import styles from "./Auth.module.css";
 
-export const Login: React.FC = () => {
+export const SignUp: React.FC = () => {
   const [validated, setValidated] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -19,6 +20,7 @@ export const Login: React.FC = () => {
   const [passwordFeedback, setPasswordFeedback] = useState<string>(
     "Enter valid password."
   );
+  const [register] = useRegisterMutation();
   const [login] = useLoginMutation();
   const history = useHistory();
 
@@ -27,41 +29,63 @@ export const Login: React.FC = () => {
     const form = event.currentTarget;
     if (form.checkValidity()) {
       try {
-        await login({
+        await register({
           variables: { email, password },
           update: (store, { data }) => {
             if (!data) {
               return null;
             }
-            store.writeQuery<MeQuery>({
-              query: MeDocument,
-              data: {
-                me: {
-                  id: data.login.id,
-                  email: data.login.email,
+            (async () => {
+              await login({
+                variables: { email, password },
+                update: (store, { data }) => {
+                  if (!data) {
+                    return null;
+                  }
+                  store.writeQuery<MeQuery>({
+                    query: MeDocument,
+                    data: {
+                      me: {
+                        id: data.login.id,
+                        email: data.login.email,
+                      },
+                    },
+                  });
+                  store.writeQuery<IsLoggedInQuery>({
+                    query: IsLoggedInDocument,
+                    data: {
+                      isLoggedIn: true,
+                    },
+                  });
+                  history.replace("/");
                 },
-              },
-            });
-            store.writeQuery<IsLoggedInQuery>({
-              query: IsLoggedInDocument,
-              data: {
-                isLoggedIn: true,
-              },
-            });
+              });
+            })();
+            // store.writeQuery<MeQuery>({
+            //   query: MeDocument,
+            //   data: {
+            //     me: {
+            //       id: data.register.id,
+            //       email: data.register.email,
+            //     },
+            //   },
+            // });
+            // store.writeQuery<IsLoggedInQuery>({
+            //   query: IsLoggedInDocument,
+            //   data: {
+            //     isLoggedIn: true,
+            //   },
+            // });
             history.replace("/");
           },
         });
       } catch (err) {
-        if (err.message === "User not found") {
-          setEmailFeedback("User with such email does not exist.");
+        if (err.message === "User already exists") {
+          setEmailFeedback("User with such email already exist.");
           setPasswordFeedback("");
           setEmail("");
+          setPassword("");
         }
-        if (err.message === "Password is incorrect") {
-          setPasswordFeedback("Enter correct password.");
-          setEmailFeedback("");
-        }
-        setPassword("");
       }
     }
 
@@ -71,7 +95,7 @@ export const Login: React.FC = () => {
   return (
     <div className={styles.Auth}>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <h3 className="mb-3">Log In</h3>
+        <h3 className="mb-3">Sign Up</h3>
         <Form.Group className="mb-3" controlId="loginEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -105,10 +129,10 @@ export const Login: React.FC = () => {
         </Form.Group>
         <div className="d-flex align-items-center justify-content-between">
           <Button variant="primary" type="submit">
-            Log In
+            Sign Up
           </Button>
-          <Link to="/sign-up" style={{ textDecoration: "none" }}>
-            Go to Sign Up
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            Go to Login
           </Link>
         </div>
       </Form>

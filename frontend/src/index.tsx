@@ -4,16 +4,10 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  createHttpLink,
 } from "@apollo/client";
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
-
-// const link = createHttpLink({
-//   uri: "http://localhost:4000/graphql",
-//   credentials: "same-origin",
-// });
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",

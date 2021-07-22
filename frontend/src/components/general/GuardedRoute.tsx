@@ -1,5 +1,5 @@
 import { QueryResult } from "@apollo/client";
-import React, { useContext } from "react";
+import React from "react";
 import { Route, RouteProps, useHistory } from "react-router-dom";
 import { useIsLoggedInQuery } from "../../generated/graphql";
 

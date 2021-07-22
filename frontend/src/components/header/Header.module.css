@@ -1,0 +1,7 @@
+.Title {
+  text-decoration: none;
+}
+
+.Title:not(:hover) {
+  color: inherit;
+}

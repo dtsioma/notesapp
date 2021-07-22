@@ -1,8 +1,10 @@
 import { QueryResult } from "@apollo/client";
-import React, { useContext } from "react";
+import React from "react";
 import { Navbar, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useIsLoggedInQuery } from "../../generated/graphql";
 import { AuthButtons } from "./AuthButtons";
+import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
   const { data, loading }: QueryResult = useIsLoggedInQuery();
@@ -15,7 +17,11 @@ export const Header: React.FC = () => {
     <header>
       <Navbar fixed={!loading && !data.isLoggedIn ? "top" : undefined}>
         <Container>
-          <Navbar.Brand>React Notes App</Navbar.Brand>
+          <Navbar.Brand>
+            <Link to="/" className={styles.Title}>
+              React Notes App
+            </Link>
+          </Navbar.Brand>
           <AuthButtons />
         </Container>
       </Navbar>

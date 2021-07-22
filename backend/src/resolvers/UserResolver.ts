@@ -75,18 +75,27 @@ export class UserResolver {
   }
 
   // register user
-  @Mutation(() => Boolean)
+  @Mutation(() => UserResponse)
   async register(
     @Arg("email") email: string,
     @Arg("password") password: string
   ) {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      throw new Error("User already exists");
+    }
+
     const hashedPassword = await hash(password, 10);
-    await User.create({
+    const user = await User.create({
       email,
       password: hashedPassword,
     }).save();
 
-    return true;
+    return {
+      id: user.id,
+      email: user.email,
+      password: user.password,
+    };
   }
 
   // login user
