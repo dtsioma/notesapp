@@ -1,0 +1,10 @@
+query NotesByCurrentAuthor {
+  notesByAuthor {
+    id
+    authorId
+    title
+    text
+    dateCreated
+    dateUpdated
+  }
+}

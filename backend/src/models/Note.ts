@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } from "type-graphql";
+import { Field, ObjectType, ID, Int } from "type-graphql";
 import {
   Column,
   CreateDateColumn,
@@ -23,9 +23,9 @@ export class Note extends BaseEntity {
   @Column()
   text: string;
 
-  @Field(() => String)
+  @Field(() => Int)
   @Column()
-  author: string;
+  authorId: number;
 
   @Field(() => Date)
   @CreateDateColumn()

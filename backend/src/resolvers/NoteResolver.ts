@@ -5,6 +5,9 @@ import {
   Mutation,
   ObjectType,
   Field,
+  Int,
+  ID,
+  Ctx,
 } from "type-graphql";
 import { Note } from "../models/Note";
 
@@ -16,8 +19,8 @@ class DeleteResponse {
   @Field()
   title: string;
 
-  @Field()
-  author: string;
+  @Field(() => Int)
+  authorId: number;
 }
 
 @Resolver()
@@ -39,9 +42,9 @@ export class NoteResolver {
   async createNote(
     @Arg("title") title: string,
     @Arg("text") text: string,
-    @Arg("author") author: string
+    @Arg("authorId") authorId: number
   ) {
-    const note = Note.create({ title, text, author });
+    const note = Note.create({ title, text, authorId });
     await note.save();
     return note;
   }
@@ -57,9 +60,9 @@ export class NoteResolver {
   }
 
   // get notes from author
-  @Mutation(() => [Note])
-  async getNotesFromAuthor(@Arg("author") author: string) {
-    const notes = await Note.find({ where: { author } });
+  @Query(() => [Note])
+  async notesByAuthor(@Ctx() { req }: any) {
+    const notes = await Note.find({ where: { authorId: req.userId } });
     if (!notes) {
       throw new Error("Notes not found");
     }
@@ -97,7 +100,7 @@ export class NoteResolver {
     await Note.delete({ id });
     return {
       title: note.title,
-      author: note.author,
+      authorId: note.authorId,
       id: note.id,
     };
   }

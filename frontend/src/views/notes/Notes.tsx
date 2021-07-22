@@ -5,6 +5,72 @@ import ClampLines from "react-clamp-lines";
 import TimeAgo from "react-timeago";
 import styles from "./Notes.module.css";
 import { Note, User } from "../../utils/interfaces";
+import { useNotesByCurrentAuthorQuery } from "../../generated/graphql";
+import { QueryResult } from "@apollo/client";
+
+export const Notes: React.FC = () => {
+  const { data, loading }: QueryResult = useNotesByCurrentAuthorQuery();
+  console.log(data);
+
+  const createNoteCard = (
+    <Col className="col-6">
+      <Card className="text-center">
+        <Link to="/notes/create" className={styles.CardLink}>
+          <Card.Body>
+            <Card.Title className="mb-4">
+              <h3>Click to create your first note!</h3>
+            </Card.Title>
+            <Button variant="primary">Let's go</Button>
+          </Card.Body>
+        </Link>
+      </Card>
+    </Col>
+  );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <main className={styles.Notes}>
+      <Container>
+        <Row className="mb-4">
+          <h2>Your Notes</h2>
+        </Row>
+        <Row className="mb-5">
+          {data && data.notesByAuthor.length !== 0
+            ? data.notesByAuthor.map((note: Note, idx: number) => (
+                <Col key={idx} className="col-3">
+                  <Card border="primary">
+                    <Link to={`/notes/${note.id}`} className={styles.CardLink}>
+                      <Card.Body>
+                        <Card.Title>{note.title}</Card.Title>
+                        <Card.Subtitle className="text-muted mb-3">
+                          <TimeAgo date={note.dateUpdated} />
+                        </Card.Subtitle>
+                        <Card.Text>
+                          <ClampLines
+                            id={`note${idx}-text`}
+                            text={note.text.replace("\n", "")}
+                            lines={3}
+                            ellipsis="..."
+                            buttons={false}
+                            className={styles.NoteText}
+                            innerElement={"p"}
+                          />
+                        </Card.Text>
+                        <Button variant="primary">Open</Button>
+                      </Card.Body>
+                    </Link>
+                  </Card>
+                </Col>
+              ))
+            : createNoteCard}
+        </Row>
+      </Container>
+    </main>
+  );
+};
 
 export const users: User[] = [
   { username: "johndoe" },
@@ -46,60 +112,3 @@ myNotes.sort((a: Note, b: Note) => {
   else if (Date.parse(a.dateUpdated) > Date.parse(b.dateUpdated)) return -1;
   else return 0;
 });
-
-export const Notes: React.FC = () => {
-  const createNoteCard = (
-    <Col className="col-6">
-      <Card className="text-center">
-        <Link to="/notes/create" className={styles.CardLink}>
-          <Card.Body>
-            <Card.Title className="mb-4">
-              <h3>Click to create your first note!</h3>
-            </Card.Title>
-            <Button variant="primary">Let's go</Button>
-          </Card.Body>
-        </Link>
-      </Card>
-    </Col>
-  );
-
-  return (
-    <main className={styles.Notes}>
-      <Container>
-        <Row className="mb-4">
-          <h2>Your Notes</h2>
-        </Row>
-        <Row className="mb-5">
-          {myNotes.length !== 0
-            ? myNotes.map((note, idx) => (
-                <Col key={idx} className="col-3">
-                  <Card border="primary">
-                    <Link to={`/notes/${note.id}`} className={styles.CardLink}>
-                      <Card.Body>
-                        <Card.Title>{note.title}</Card.Title>
-                        <Card.Subtitle className="text-muted mb-3">
-                          <TimeAgo date={note.dateUpdated} />
-                        </Card.Subtitle>
-                        <Card.Text>
-                          <ClampLines
-                            id={`note${idx}-text`}
-                            text={note.text.replace("\n", "")}
-                            lines={3}
-                            ellipsis="..."
-                            buttons={false}
-                            className={styles.NoteText}
-                            innerElement={"p"}
-                          />
-                        </Card.Text>
-                        <Button variant="primary">Open</Button>
-                      </Card.Body>
-                    </Link>
-                  </Card>
-                </Col>
-              ))
-            : createNoteCard}
-        </Row>
-      </Container>
-    </main>
-  );
-};
