@@ -29,3 +29,7 @@ mutation updateNote($id: String!, $title: String!, $text: String!) {
     dateUpdated
   }
 }
+
+mutation deleteNote($id: String!) {
+  deleteNote(id: $id)
+}

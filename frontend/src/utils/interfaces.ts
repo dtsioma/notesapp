@@ -17,10 +17,6 @@ export interface Note {
   // sharedWith: UserInShared[];
 }
 
-export interface MatchParams {
-  id: string;
-}
-
 export interface User {
   username: string;
 }

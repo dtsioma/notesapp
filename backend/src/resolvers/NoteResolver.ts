@@ -117,17 +117,17 @@ export class NoteResolver {
   }
 
   // delete note
-  @Mutation(() => DeleteResponse)
+  @Mutation(() => Boolean)
   async deleteNote(@Arg("id") id: string) {
     let note = await Note.findOne({ where: { id } });
     if (!note) {
       throw new Error("Note not found");
     }
-    await Note.delete({ id });
-    return {
-      title: note.title,
-      authorId: note.authorId,
-      id: note.id,
-    };
+    try {
+      await Note.delete({ id });
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

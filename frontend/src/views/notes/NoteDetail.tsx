@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Redirect } from "react-router-dom";
 import {
   Button,
   Card,
@@ -11,15 +11,15 @@ import {
   Toast,
   ToastContainer,
 } from "react-bootstrap";
-import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
 import TimeAgo from "react-timeago";
-import { MatchParams, Note } from "../../utils/interfaces";
+import { Note } from "../../utils/interfaces";
 import { shallowEqual } from "../../utils/areObjectsEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
 import {
   useCreateNoteMutation,
+  useDeleteNoteMutation,
   useGetNoteByIdQuery,
   useUpdateNoteMutation,
 } from "../../generated/graphql";
@@ -41,10 +41,12 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
   const [text, setText] = useState<string>();
   const [noteContent, setNoteContent] = useState<Note | null>(null);
 
-  const [showEditedToast, setShowEditedToast] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>("");
 
   const [createNote] = useCreateNoteMutation();
   const [updateNote] = useUpdateNoteMutation();
+  const [deleteNote] = useDeleteNoteMutation();
 
   const { data, loading } = useGetNoteByIdQuery({ variables: { noteId } });
 
@@ -130,6 +132,14 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
     setText(noteContent.text);
   };
 
+  const displayToast = (text: string) => {
+    setToastText(text);
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
+
   const handleSave = async () => {
     if (!title) {
       setTitle("No Title");
@@ -160,15 +170,31 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
         variables: { id: noteId, title, text },
         update: (store, { data }) => {
           store.reset();
-          setShowEditedToast(true);
-          setTimeout(() => {
-            setShowEditedToast(false);
-          }, 3000);
+          displayToast("Changes saved successfully.");
           console.log("note edited successfully");
         },
       });
     } catch (err) {
+      displayToast("There was an error. Try again later.");
       console.log(err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteNote({
+        variables: { id: noteId },
+        update: (store, { data }) => {
+          if (data && data.deleteNote) {
+            store.reset();
+            history.replace("/");
+          } else {
+            displayToast("There was an error. Try again later.");
+          }
+        },
+      });
+    } catch {
+      displayToast("There was an error. Try again later.");
     }
   };
 
@@ -287,13 +313,14 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
           setShowDeleteModal(false);
         }}
         handleSubmit={() => {
+          handleDelete();
           console.log("note deleted");
           setShowDeleteModal(false);
         }}
       />
       <ToastContainer className="p-3" position="top-center">
-        <Toast show={showEditedToast}>
-          <Toast.Body>Changes saved successfully</Toast.Body>
+        <Toast show={showToast}>
+          <Toast.Body>{toastText}</Toast.Body>
         </Toast>
       </ToastContainer>
     </main>
