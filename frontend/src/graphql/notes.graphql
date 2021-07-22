@@ -20,3 +20,12 @@ query getNoteById($noteId: String!) {
     dateUpdated
   }
 }
+
+mutation updateNote($id: String!, $title: String!, $text: String!) {
+  updateNote(id: $id, title: $title, text: $text) {
+    title
+    text
+    dateCreated
+    dateUpdated
+  }
+}

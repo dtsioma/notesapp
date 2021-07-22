@@ -23,6 +23,21 @@ class DeleteResponse {
   authorId: number;
 }
 
+@ObjectType()
+class UpdateResponse {
+  @Field()
+  title: string;
+
+  @Field()
+  text: string;
+
+  @Field()
+  dateCreated: string;
+
+  @Field()
+  dateUpdated: string;
+}
+
 @Resolver()
 export class NoteResolver {
   // return hello
@@ -76,7 +91,7 @@ export class NoteResolver {
   }
 
   // update note
-  @Mutation(() => Note)
+  @Mutation(() => UpdateResponse)
   async updateNote(
     @Arg("id") id: string,
     @Arg("title", { nullable: true }) title: string,
@@ -93,7 +108,12 @@ export class NoteResolver {
       note.text = text;
     }
     await note.save();
-    return note;
+    return {
+      title: note.title,
+      text: note.text,
+      dateCreated: note.dateCreated,
+      dateUpdated: note.dateUpdated,
+    };
   }
 
   // delete note

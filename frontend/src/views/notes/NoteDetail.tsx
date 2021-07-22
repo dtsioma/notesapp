@@ -8,6 +8,8 @@ import {
   ListGroup,
   Row,
   Form,
+  Toast,
+  ToastContainer,
 } from "react-bootstrap";
 import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
@@ -19,6 +21,7 @@ import { DeleteModal } from "../../components/notes/DeleteModal";
 import {
   useCreateNoteMutation,
   useGetNoteByIdQuery,
+  useUpdateNoteMutation,
 } from "../../generated/graphql";
 
 interface NoteDetailProps {
@@ -38,7 +41,10 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
   const [text, setText] = useState<string>();
   const [noteContent, setNoteContent] = useState<Note | null>(null);
 
+  const [showEditedToast, setShowEditedToast] = useState<boolean>(false);
+
   const [createNote] = useCreateNoteMutation();
+  const [updateNote] = useUpdateNoteMutation();
 
   const { data, loading } = useGetNoteByIdQuery({ variables: { noteId } });
 
@@ -134,6 +140,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
       return;
     }
     setEditingMode(false);
+    // create new note
     if (newNote) {
       try {
         await createNote({
@@ -146,6 +153,22 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
       } catch (err) {
         console.log(err);
       }
+    }
+    // save changes to existing note
+    try {
+      await updateNote({
+        variables: { id: noteId, title, text },
+        update: (store, { data }) => {
+          store.reset();
+          setShowEditedToast(true);
+          setTimeout(() => {
+            setShowEditedToast(false);
+          }, 3000);
+          console.log("note edited successfully");
+        },
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -268,6 +291,11 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
           setShowDeleteModal(false);
         }}
       />
+      <ToastContainer className="p-3" position="top-center">
+        <Toast show={showEditedToast}>
+          <Toast.Body>Changes saved successfully</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </main>
   );
 };

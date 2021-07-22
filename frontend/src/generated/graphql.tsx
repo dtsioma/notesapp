@@ -27,7 +27,7 @@ export type DeleteResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   createNote: Scalars['Boolean'];
-  updateNote: Note;
+  updateNote: UpdateResponse;
   deleteNote: DeleteResponse;
   register: UserResponse;
   login: UserResponse;
@@ -95,6 +95,14 @@ export type QueryNoteByIdArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['Float'];
+};
+
+export type UpdateResponse = {
+  __typename?: 'UpdateResponse';
+  title: Scalars['String'];
+  text: Scalars['String'];
+  dateCreated: Scalars['String'];
+  dateUpdated: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -176,6 +184,21 @@ export type GetNoteByIdQuery = (
   & { noteById: (
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'title' | 'text' | 'authorId' | 'dateCreated' | 'dateUpdated'>
+  ) }
+);
+
+export type UpdateNoteMutationVariables = Exact<{
+  id: Scalars['String'];
+  title: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type UpdateNoteMutation = (
+  { __typename?: 'Mutation' }
+  & { updateNote: (
+    { __typename?: 'UpdateResponse' }
+    & Pick<UpdateResponse, 'title' | 'text' | 'dateCreated' | 'dateUpdated'>
   ) }
 );
 
@@ -434,6 +457,44 @@ export function useGetNoteByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetNoteByIdQueryHookResult = ReturnType<typeof useGetNoteByIdQuery>;
 export type GetNoteByIdLazyQueryHookResult = ReturnType<typeof useGetNoteByIdLazyQuery>;
 export type GetNoteByIdQueryResult = Apollo.QueryResult<GetNoteByIdQuery, GetNoteByIdQueryVariables>;
+export const UpdateNoteDocument = gql`
+    mutation updateNote($id: String!, $title: String!, $text: String!) {
+  updateNote(id: $id, title: $title, text: $text) {
+    title
+    text
+    dateCreated
+    dateUpdated
+  }
+}
+    `;
+export type UpdateNoteMutationFn = Apollo.MutationFunction<UpdateNoteMutation, UpdateNoteMutationVariables>;
+
+/**
+ * __useUpdateNoteMutation__
+ *
+ * To run a mutation, you first call `useUpdateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNoteMutation, { data, loading, error }] = useUpdateNoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useUpdateNoteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNoteMutation, UpdateNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(UpdateNoteDocument, options);
+      }
+export type UpdateNoteMutationHookResult = ReturnType<typeof useUpdateNoteMutation>;
+export type UpdateNoteMutationResult = Apollo.MutationResult<UpdateNoteMutation>;
+export type UpdateNoteMutationOptions = Apollo.BaseMutationOptions<UpdateNoteMutation, UpdateNoteMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password: String!) {
   register(email: $email, password: $password) {
