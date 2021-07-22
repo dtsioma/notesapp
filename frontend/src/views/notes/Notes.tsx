@@ -35,7 +35,14 @@ export const Notes: React.FC = () => {
     <main className={styles.Notes}>
       <Container>
         <Row className="mb-4">
-          <h2>Your Notes</h2>
+          <h2>
+            Your Notes
+            {data.notesByAuthor.length > 0 ? (
+              <Button variant="success" className="ms-3">
+                Create Note
+              </Button>
+            ) : null}
+          </h2>
         </Row>
         <Row className="mb-5">
           {data && data.notesByAuthor.length !== 0

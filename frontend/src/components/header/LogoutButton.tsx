@@ -21,6 +21,7 @@ export const LogoutButton: React.FC = () => {
             if (!data) {
               return null;
             }
+            store.reset();
             store.writeQuery<IsLoggedInQuery>({
               query: IsLoggedInDocument,
               data: {
