@@ -105,21 +105,21 @@ export const users: User[] = [
 
 export const myNotes: Note[] = [
   {
-    id: 1,
+    id: "1",
     title: "First note",
     text: "Hello!\n\nThis is my first note!",
     dateCreated: "Wed Jul 14 2021 17:31:25 GMT-0700 (PDT)",
     dateUpdated: "Wed Jul 14 2021 20:49:08 GMT-0700 (PDT)",
   },
   {
-    id: 2,
+    id: "2",
     title: "Another note",
     text: "Ok\n\nhere we go\n\nanother note by me",
     dateCreated: "Wed Jul 14 2021 17:35:23 GMT-0700 (PDT)",
     dateUpdated: "Wed Jul 14 2021 17:35:23 GMT-0700 (PDT)",
   },
   {
-    id: 3,
+    id: "3",
     title: "This is my first note",
     text: "Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, ab. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores vero dolorum similique provident ducimus natus, error sunt quae est sit!!\n\nThis is my first note!",
     dateCreated: "Wed Jul 14 2021 17:35:44 GMT-0700 (PDT)",

@@ -9,7 +9,7 @@ export interface UserInShared {
 }
 
 export interface Note {
-  id: number;
+  id: string;
   title: string;
   text: string;
   dateCreated: string;

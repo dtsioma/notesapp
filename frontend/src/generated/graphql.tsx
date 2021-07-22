@@ -79,7 +79,7 @@ export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   notes: Array<Note>;
-  getNoteByID: Note;
+  noteById: Note;
   notesByAuthor: Array<Note>;
   me: UserResponse;
   isLoggedIn: Scalars['Boolean'];
@@ -88,7 +88,7 @@ export type Query = {
 };
 
 
-export type QueryGetNoteByIdArgs = {
+export type QueryNoteByIdArgs = {
   id: Scalars['String'];
 };
 
@@ -164,6 +164,19 @@ export type CreateNoteMutationVariables = Exact<{
 export type CreateNoteMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'createNote'>
+);
+
+export type GetNoteByIdQueryVariables = Exact<{
+  noteId: Scalars['String'];
+}>;
+
+
+export type GetNoteByIdQuery = (
+  { __typename?: 'Query' }
+  & { noteById: (
+    { __typename?: 'Note' }
+    & Pick<Note, 'id' | 'title' | 'text' | 'authorId' | 'dateCreated' | 'dateUpdated'>
+  ) }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -381,6 +394,46 @@ export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
 export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
 export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
+export const GetNoteByIdDocument = gql`
+    query getNoteById($noteId: String!) {
+  noteById(id: $noteId) {
+    id
+    title
+    text
+    authorId
+    dateCreated
+    dateUpdated
+  }
+}
+    `;
+
+/**
+ * __useGetNoteByIdQuery__
+ *
+ * To run a query within a React component, call `useGetNoteByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNoteByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNoteByIdQuery({
+ *   variables: {
+ *      noteId: // value for 'noteId'
+ *   },
+ * });
+ */
+export function useGetNoteByIdQuery(baseOptions: Apollo.QueryHookOptions<GetNoteByIdQuery, GetNoteByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNoteByIdQuery, GetNoteByIdQueryVariables>(GetNoteByIdDocument, options);
+      }
+export function useGetNoteByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNoteByIdQuery, GetNoteByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNoteByIdQuery, GetNoteByIdQueryVariables>(GetNoteByIdDocument, options);
+        }
+export type GetNoteByIdQueryHookResult = ReturnType<typeof useGetNoteByIdQuery>;
+export type GetNoteByIdLazyQueryHookResult = ReturnType<typeof useGetNoteByIdLazyQuery>;
+export type GetNoteByIdQueryResult = Apollo.QueryResult<GetNoteByIdQuery, GetNoteByIdQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password: String!) {
   register(email: $email, password: $password) {

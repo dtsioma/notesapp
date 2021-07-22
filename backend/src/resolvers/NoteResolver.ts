@@ -57,7 +57,7 @@ export class NoteResolver {
 
   // get note by id
   @Query(() => Note)
-  async getNoteByID(@Arg("id") id: string) {
+  async noteById(@Arg("id") id: string) {
     const note = await Note.findOne({ where: { id } });
     if (!note) {
       throw new Error("Note not found");

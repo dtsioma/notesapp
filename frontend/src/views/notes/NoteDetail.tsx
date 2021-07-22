@@ -8,8 +8,6 @@ import {
   ListGroup,
   Row,
   Form,
-  Toast,
-  ToastContainer,
 } from "react-bootstrap";
 import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
@@ -18,15 +16,17 @@ import { MatchParams, Note } from "../../utils/interfaces";
 import { shallowEqual } from "../../utils/areObjectsEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
-import { useCreateNoteMutation } from "../../generated/graphql";
+import {
+  useCreateNoteMutation,
+  useGetNoteByIdQuery,
+} from "../../generated/graphql";
 
 interface NoteDetailProps {
   newNote: boolean;
 }
 
 export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
-  console.log(newNote);
-  const { noteId } = useParams<{ noteId?: string }>();
+  const { id: noteId } = useParams<{ id: string }>();
   const [showDateEdited, setShowDateEdited] = useState<boolean>(true);
   const [editingMode, setEditingMode] = useState<boolean>(newNote);
   const [isEdited, setIsEdited] = useState<boolean>(false);
@@ -40,6 +40,8 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
 
   const [createNote] = useCreateNoteMutation();
 
+  const { data, loading } = useGetNoteByIdQuery({ variables: { noteId } });
+
   // Get Note object
   useEffect(() => {
     // set empty content if note is new
@@ -49,17 +51,23 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
         text: "",
         dateCreated: new Date().toISOString(),
         dateUpdated: new Date().toISOString(),
-        id: 999999999999, // don't care
+        id: "999999999999", // don't care
       });
       setTitle("");
       setText("");
       return;
     }
-    const note = myNotes.filter((x) => x.id === Number(noteId))[0];
-    setNoteContent(note);
-    setTitle(note.title);
-    setText(note.text);
-  }, [noteId]);
+    console.log({ data, loading });
+    if (data) {
+      setNoteContent(data.noteById);
+      setTitle(data.noteById.title);
+      setText(data.noteById.text);
+      console.log("note content set successfully");
+    }
+    if (!data && !loading) {
+      history.replace("/");
+    }
+  }, [noteId, data, loading]);
 
   // check if Note is edited
   const noteIsEdited = () => {
