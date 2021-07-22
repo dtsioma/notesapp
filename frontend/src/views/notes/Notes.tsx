@@ -38,9 +38,11 @@ export const Notes: React.FC = () => {
           <h2>
             Your Notes
             {data.notesByAuthor.length > 0 ? (
-              <Button variant="success" className="ms-3">
-                Create Note
-              </Button>
+              <Link to="/notes/create">
+                <Button variant="success" className="ms-3">
+                  Create Note
+                </Button>
+              </Link>
             ) : null}
           </h2>
         </Row>

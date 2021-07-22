@@ -29,7 +29,7 @@ export const Routes: React.FC = () => {
       <GuardedRoute
         exact
         path="/notes/create"
-        render={() => <h3>Create new note here</h3>}
+        render={() => <NoteDetail newNote />}
       />
       <GuardedRoute exact path="/notes/:id" component={NoteDetail} />
     </Switch>

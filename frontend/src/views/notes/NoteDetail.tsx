@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Button,
   Card,
@@ -8,7 +9,6 @@ import {
   Row,
   Form,
 } from "react-bootstrap";
-import { RouteComponentProps } from "react-router-dom";
 import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
 import TimeAgo from "react-timeago";
@@ -17,11 +17,15 @@ import { shallowEqual } from "../../utils/areObjectsEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
 
-interface NoteDetailProps extends RouteComponentProps<MatchParams> {}
+interface NoteDetailProps {
+  newNote: boolean;
+}
 
-export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
+export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
+  console.log(newNote);
+  const { noteId } = useParams<{ noteId?: string }>();
   const [showDateEdited, setShowDateEdited] = useState<boolean>(true);
-  const [editingMode, setEditingMode] = useState<boolean>(false);
+  const [editingMode, setEditingMode] = useState<boolean>(newNote);
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [showCCModal, setShowCCModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -31,9 +35,21 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
   const [noteContent, setNoteContent] = useState<Note | null>(null);
 
   // Get Note object
-  const noteId = Number(match.params.id);
   useEffect(() => {
-    const note = myNotes.filter((x) => x.id === noteId)[0];
+    // set empty content if note is new
+    if (newNote) {
+      setNoteContent({
+        title: "",
+        text: "",
+        dateCreated: new Date().toISOString(),
+        dateUpdated: new Date().toISOString(),
+        id: 999999999999, // don't care
+      });
+      setTitle("");
+      setText("");
+      return;
+    }
+    const note = myNotes.filter((x) => x.id === Number(noteId))[0];
     setNoteContent(note);
     setTitle(note.title);
     setText(note.text);
@@ -105,6 +121,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
               <Form.Control
                 as="input"
                 value={title}
+                placeholder="Enter title"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -118,6 +135,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
                 <Form.Control
                   as="textarea"
                   id="NoteTextArea"
+                  placeholder="Enter text"
                   value={text}
                   readOnly={!editingMode}
                   rows={10}
@@ -132,13 +150,15 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ match }) => {
               {/* SIDEBAR */}
               <Col className="col-3">
                 <Card>
-                  <ListGroup variant="flush">
-                    <ListGroup.Item
-                      onClick={() => setShowDateEdited((x) => !x)}
-                    >
-                      {sidebarDate}
-                    </ListGroup.Item>
-                  </ListGroup>
+                  {!newNote ? (
+                    <ListGroup variant="flush">
+                      <ListGroup.Item
+                        onClick={() => setShowDateEdited((x) => !x)}
+                      >
+                        {sidebarDate}
+                      </ListGroup.Item>
+                    </ListGroup>
+                  ) : null}
                   <Card.Body>
                     <div className="d-grid gap-2">
                       {editingMode ? (

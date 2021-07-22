@@ -52,10 +52,10 @@ export const Login: React.FC = () => {
           },
         });
       } catch (err) {
+        console.log(err);
         if (err.message === "User not found") {
           setEmailFeedback("User with such email does not exist.");
           setPasswordFeedback("");
-          setEmail("");
         }
         if (err.message === "Password is incorrect") {
           setPasswordFeedback("Enter correct password.");
@@ -81,6 +81,7 @@ export const Login: React.FC = () => {
             required
             onChange={(e) => {
               setEmail(e.target.value);
+              setEmailFeedback("Enter valid email.");
             }}
           />
           <Form.Control.Feedback type="invalid">
@@ -97,6 +98,7 @@ export const Login: React.FC = () => {
             required
             onChange={(e) => {
               setPassword(e.target.value);
+              setPasswordFeedback("Enter valid password.");
             }}
           />
           <Form.Control.Feedback type="invalid">
