@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {
   Button,
   Card,
@@ -32,14 +32,13 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [showCCModal, setShowCCModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const location = useLocation();
+  const history = useHistory();
 
   const [title, setTitle] = useState<string>();
   const [text, setText] = useState<string>();
   const [noteContent, setNoteContent] = useState<Note | null>(null);
 
   const [createNote] = useCreateNoteMutation();
-  const [noteSavedSuccess, setNoteSavedSuccess] = useState<boolean>(false);
 
   // Get Note object
   useEffect(() => {
@@ -133,12 +132,9 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
           variables: { title, text },
           update: (store) => {
             store.reset();
+            history.replace("/");
           },
         });
-        setNoteSavedSuccess(true);
-        setTimeout(() => {
-          setNoteSavedSuccess(false);
-        }, 3000);
       } catch (err) {
         console.log(err);
       }
@@ -264,13 +260,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
           setShowDeleteModal(false);
         }}
       />
-      <div>
-        <ToastContainer position="top-center" className="mt-3">
-          <Toast show={noteSavedSuccess}>
-            <Toast.Body>Note Saved Successfully!</Toast.Body>
-          </Toast>
-        </ToastContainer>
-      </div>
     </main>
   );
 };
