@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   Button,
   Card,
@@ -8,6 +8,8 @@ import {
   ListGroup,
   Row,
   Form,
+  Toast,
+  ToastContainer,
 } from "react-bootstrap";
 import { myNotes } from "./Notes";
 import styles from "./NoteDetail.module.css";
@@ -16,6 +18,7 @@ import { MatchParams, Note } from "../../utils/interfaces";
 import { shallowEqual } from "../../utils/areObjectsEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
+import { useCreateNoteMutation } from "../../generated/graphql";
 
 interface NoteDetailProps {
   newNote: boolean;
@@ -29,10 +32,14 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [showCCModal, setShowCCModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const location = useLocation();
 
   const [title, setTitle] = useState<string>();
   const [text, setText] = useState<string>();
   const [noteContent, setNoteContent] = useState<Note | null>(null);
+
+  const [createNote] = useCreateNoteMutation();
+  const [noteSavedSuccess, setNoteSavedSuccess] = useState<boolean>(false);
 
   // Get Note object
   useEffect(() => {
@@ -108,6 +115,34 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
     setEditingMode(false);
     setTitle(noteContent.title);
     setText(noteContent.text);
+  };
+
+  const handleSave = async () => {
+    if (!title) {
+      setTitle("No Title");
+      return;
+    }
+    if (!text) {
+      setText("No Text");
+      return;
+    }
+    setEditingMode(false);
+    if (newNote) {
+      try {
+        await createNote({
+          variables: { title, text },
+          update: (store) => {
+            store.reset();
+          },
+        });
+        setNoteSavedSuccess(true);
+        setTimeout(() => {
+          setNoteSavedSuccess(false);
+        }, 3000);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   return (
@@ -188,10 +223,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
                       {editingMode ? (
                         <Button
                           variant="success"
-                          onClick={() => {
-                            setEditingMode(false);
-                            console.log("saved successfuly");
-                          }}
+                          onClick={handleSave}
                           disabled={!isEdited}
                         >
                           Save
@@ -232,6 +264,13 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
           setShowDeleteModal(false);
         }}
       />
+      <div>
+        <ToastContainer position="top-center" className="mt-3">
+          <Toast show={noteSavedSuccess}>
+            <Toast.Body>Note Saved Successfully!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      </div>
     </main>
   );
 };

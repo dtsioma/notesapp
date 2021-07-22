@@ -1,10 +1,11 @@
 query NotesByCurrentAuthor {
   notesByAuthor {
     id
-    authorId
     title
     text
-    dateCreated
-    dateUpdated
   }
+}
+
+mutation CreateNote($title: String!, $text: String!) {
+  createNote(title: $title, text: $text)
 }

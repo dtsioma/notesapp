@@ -38,15 +38,21 @@ export class NoteResolver {
   }
 
   // create note
-  @Mutation(() => Note)
+  @Mutation(() => Boolean)
   async createNote(
     @Arg("title") title: string,
     @Arg("text") text: string,
-    @Arg("authorId") authorId: number
+    @Ctx() { req }: any
   ) {
-    const note = Note.create({ title, text, authorId });
-    await note.save();
-    return note;
+    try {
+      const authorId = req.userId;
+      const note = Note.create({ title, text, authorId });
+      await note.save();
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 
   // get note by id

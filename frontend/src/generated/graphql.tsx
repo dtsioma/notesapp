@@ -26,7 +26,7 @@ export type DeleteResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createNote: Note;
+  createNote: Scalars['Boolean'];
   updateNote: Note;
   deleteNote: DeleteResponse;
   register: UserResponse;
@@ -37,7 +37,6 @@ export type Mutation = {
 
 
 export type MutationCreateNoteArgs = {
-  authorId: Scalars['Float'];
   text: Scalars['String'];
   title: Scalars['String'];
 };
@@ -152,8 +151,19 @@ export type NotesByCurrentAuthorQuery = (
   { __typename?: 'Query' }
   & { notesByAuthor: Array<(
     { __typename?: 'Note' }
-    & Pick<Note, 'id' | 'authorId' | 'title' | 'text' | 'dateCreated' | 'dateUpdated'>
+    & Pick<Note, 'id' | 'title' | 'text'>
   )> }
+);
+
+export type CreateNoteMutationVariables = Exact<{
+  title: Scalars['String'];
+  text: Scalars['String'];
+}>;
+
+
+export type CreateNoteMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createNote'>
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -307,11 +317,8 @@ export const NotesByCurrentAuthorDocument = gql`
     query NotesByCurrentAuthor {
   notesByAuthor {
     id
-    authorId
     title
     text
-    dateCreated
-    dateUpdated
   }
 }
     `;
@@ -342,6 +349,38 @@ export function useNotesByCurrentAuthorLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type NotesByCurrentAuthorQueryHookResult = ReturnType<typeof useNotesByCurrentAuthorQuery>;
 export type NotesByCurrentAuthorLazyQueryHookResult = ReturnType<typeof useNotesByCurrentAuthorLazyQuery>;
 export type NotesByCurrentAuthorQueryResult = Apollo.QueryResult<NotesByCurrentAuthorQuery, NotesByCurrentAuthorQueryVariables>;
+export const CreateNoteDocument = gql`
+    mutation CreateNote($title: String!, $text: String!) {
+  createNote(title: $title, text: $text)
+}
+    `;
+export type CreateNoteMutationFn = Apollo.MutationFunction<CreateNoteMutation, CreateNoteMutationVariables>;
+
+/**
+ * __useCreateNoteMutation__
+ *
+ * To run a mutation, you first call `useCreateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNoteMutation, { data, loading, error }] = useCreateNoteMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateNoteMutation, CreateNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, options);
+      }
+export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
+export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
+export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password: String!) {
   register(email: $email, password: $password) {

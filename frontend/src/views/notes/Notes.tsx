@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ClampLines from "react-clamp-lines";
@@ -10,7 +10,9 @@ import { QueryResult } from "@apollo/client";
 
 export const Notes: React.FC = () => {
   const { data, loading }: QueryResult = useNotesByCurrentAuthorQuery();
-  console.log(data);
+  const [notes, setNotes] = useState<JSX.Element | null>(null);
+
+  console.log("notes rerender");
 
   const createNoteCard = (
     <Col className="col-6">
@@ -26,6 +28,42 @@ export const Notes: React.FC = () => {
       </Card>
     </Col>
   );
+
+  // rerender if notes list changed
+  useEffect(() => {
+    console.log(data);
+    if (data && data.notesByAuthor.length !== 0) {
+      setNotes(
+        data.notesByAuthor.map((note: Note, idx: number) => (
+          <Col key={idx} className="col-3 mt-3">
+            <Card border="primary">
+              <Link to={`/notes/${note.id}`} className={styles.CardLink}>
+                <Card.Body>
+                  <Card.Title>{note.title}</Card.Title>
+                  <Card.Subtitle className="text-muted mb-3">
+                    <TimeAgo date={note.dateUpdated} />
+                  </Card.Subtitle>
+                  <Card.Text>
+                    <ClampLines
+                      id={`note${idx}-text`}
+                      text={note.text.replace("\n", "")}
+                      lines={3}
+                      ellipsis="..."
+                      buttons={false}
+                      className={styles.NoteText}
+                      innerElement={"p"}
+                    />
+                  </Card.Text>
+                  <Button variant="primary">Open</Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+        ))
+      );
+    }
+    console.log({ notes });
+  }, [data]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -47,34 +85,7 @@ export const Notes: React.FC = () => {
           </h2>
         </Row>
         <Row className="mb-5">
-          {data && data.notesByAuthor.length !== 0
-            ? data.notesByAuthor.map((note: Note, idx: number) => (
-                <Col key={idx} className="col-3">
-                  <Card border="primary">
-                    <Link to={`/notes/${note.id}`} className={styles.CardLink}>
-                      <Card.Body>
-                        <Card.Title>{note.title}</Card.Title>
-                        <Card.Subtitle className="text-muted mb-3">
-                          <TimeAgo date={note.dateUpdated} />
-                        </Card.Subtitle>
-                        <Card.Text>
-                          <ClampLines
-                            id={`note${idx}-text`}
-                            text={note.text.replace("\n", "")}
-                            lines={3}
-                            ellipsis="..."
-                            buttons={false}
-                            className={styles.NoteText}
-                            innerElement={"p"}
-                          />
-                        </Card.Text>
-                        <Button variant="primary">Open</Button>
-                      </Card.Body>
-                    </Link>
-                  </Card>
-                </Col>
-              ))
-            : createNoteCard}
+          {data && data.notesByAuthor.length !== 0 ? notes : createNoteCard}
         </Row>
       </Container>
     </main>
