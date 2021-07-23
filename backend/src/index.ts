@@ -11,6 +11,7 @@ import { verify } from "jsonwebtoken";
 import { User } from "./models/User";
 import { createTokens } from "./auth";
 import cors from "cors";
+import path from "path";
 
 (async () => {
   const app = express();
@@ -67,7 +68,12 @@ import cors from "cors";
     return next();
   });
 
+  // Have Node serve the files for our built React app
+  app.use(express.static(path.resolve(__dirname, "../client/build")));
+
   app.get("/", (req, res) => res.send("Hello from Express Server"));
+
+  app.get("");
 
   await createConnection();
   const apolloServer = new ApolloServer({
@@ -78,7 +84,14 @@ import cors from "cors";
   });
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(4000, () => {
+  // All other GET requests not handled before will return our React app
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+  });
+
+  const PORT = process.env.PORT || 4000;
+
+  app.listen(PORT, () => {
     console.log("Express server started!");
   });
 })();

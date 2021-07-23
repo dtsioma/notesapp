@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ClampLines from "react-clamp-lines";
 import TimeAgo from "react-timeago";
 import styles from "./Notes.module.css";
-import { Note, User } from "../../utils/interfaces";
+import { Note } from "../../utils/interfaces";
 import { useNotesByCurrentAuthorQuery } from "../../generated/graphql";
 import { QueryResult } from "@apollo/client";
 import { Loading } from "../../components/general/Loading";

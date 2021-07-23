@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory, Redirect } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {
   Button,
   Card,
@@ -74,7 +74,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
     if (!data && !loading) {
       history.replace("/");
     }
-  }, [noteId, data, loading]);
+  }, [noteId, data, loading, history, newNote]);
 
   // check if Note is edited
   const noteIsEdited = () => {
