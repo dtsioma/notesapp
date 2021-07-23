@@ -1,6 +1,11 @@
 .Notes {
   margin-top: 50px;
 }
+@media (max-width: 767px) {
+  .Notes {
+    margin-top: 30px;
+  }
+}
 
 .NoteText {
   line-height: 1.2em;

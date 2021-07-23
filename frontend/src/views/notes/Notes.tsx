@@ -81,7 +81,7 @@ export const Notes: React.FC = () => {
   return (
     <main className={styles.Notes}>
       <Container>
-        <Row className="mb-4">
+        <Row className="mb-2 mb-md-4">
           <h2>
             Your Notes
             {data.notesByAuthor.length > 0 ? (
