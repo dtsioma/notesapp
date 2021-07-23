@@ -1,6 +1,6 @@
 import { QueryResult } from "@apollo/client";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { useIsLoggedInQuery } from "../../generated/graphql";
 import { Login } from "../../views/auth/Login";
 import { SignUp } from "../../views/auth/SignUp";
@@ -32,6 +32,9 @@ export const Routes: React.FC = () => {
         render={() => <NoteDetail newNote />}
       />
       <GuardedRoute exact path="/notes/:id" component={NoteDetail} />
+      <Route path="/">
+        <Redirect to="/" />
+      </Route>
     </Switch>
   );
 };

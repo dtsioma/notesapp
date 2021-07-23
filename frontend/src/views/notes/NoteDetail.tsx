@@ -17,6 +17,7 @@ import { Note } from "../../utils/interfaces";
 import { shallowEqual } from "../../utils/areObjectsEqual";
 import { CancelChangesModal } from "../../components/notes/CancelChangesModal";
 import { DeleteModal } from "../../components/notes/DeleteModal";
+import { Loading } from "../../components/general/Loading";
 import {
   useCreateNoteMutation,
   useDeleteNoteMutation,
@@ -202,7 +203,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
     <main className={styles.NoteView}>
       <Container>
         {!noteContent ? (
-          <h3>Loading...</h3>
+          <Loading fullScreen transparent />
         ) : (
           <React.Fragment>
             <Row className="mt-5 mb-3">
