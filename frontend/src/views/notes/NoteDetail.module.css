@@ -3,8 +3,25 @@
   font-weight: 500;
   border-color: transparent;
 }
+@media (max-width: 767px) {
+  .Title {
+    font-size: 2rem;
+  }
+}
 
 .Title[readonly],
 .Textarea[readonly] {
   background-color: white;
+}
+
+@media (max-width: 767px) {
+  .Wrapper {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  .Sidebar {
+    margin-top: 20px;
+  }
 }

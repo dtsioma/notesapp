@@ -209,7 +209,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
           <Loading fullScreen transparent />
         ) : (
           <React.Fragment>
-            <Row className="mt-5 mb-3">
+            <Row className="mt-md-3 mt-lg-5 mb-sm-2 mb-lg-3">
               <Form.Control
                 as="input"
                 value={title}
@@ -221,9 +221,9 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
                 className={styles.Title}
               />
             </Row>
-            <Row>
+            <Row className={styles.Wrapper}>
               {/* NOTE CONTENT */}
-              <Col className="col-9">
+              <Col className="col-md-8 col-lg-9">
                 <Form.Control
                   as="textarea"
                   id="NoteTextArea"
@@ -240,7 +240,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
                 </Form.Control>
               </Col>
               {/* SIDEBAR */}
-              <Col className="col-3">
+              <Col className={["col-md-4 col-lg-3", styles.Sidebar].join(" ")}>
                 <Card>
                   {!newNote ? (
                     <ListGroup variant="flush">
@@ -323,7 +323,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
         }}
       />
       <ToastContainer className="p-3" position="top-center">
-        <Toast show={showToast}>
+        <Toast show={showToast} bg="light">
           <Toast.Body>{toastText}</Toast.Body>
         </Toast>
       </ToastContainer>
