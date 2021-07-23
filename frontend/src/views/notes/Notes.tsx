@@ -42,7 +42,7 @@ export const Notes: React.FC = () => {
       const newNotes = [...data.notesByAuthor]
         .sort(sortNotesByNew)
         .map((note: Note, idx: number) => (
-          <Col key={idx} className="col-3 mt-3">
+          <Col key={idx} className="col col-sm-6 col-lg-3 mt-3">
             <Card border="primary">
               <Link to={`/notes/${note.id}`} className={styles.CardLink}>
                 <Card.Body>
@@ -92,7 +92,7 @@ export const Notes: React.FC = () => {
             ) : null}
           </h2>
         </Row>
-        <Row className="mb-5">
+        <Row className={["mb-5", styles.ColumnXS].join(" ")}>
           {data && data.notesByAuthor.length !== 0 ? notes : createNoteCard}
         </Row>
       </Container>

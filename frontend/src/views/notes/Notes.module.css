@@ -15,3 +15,9 @@
 .CardLink:hover {
   color: inherit;
 }
+
+@media (max-width: 575px) {
+  .ColumnXS {
+    flex-direction: column;
+  }
+}
