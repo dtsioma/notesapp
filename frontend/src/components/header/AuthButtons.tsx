@@ -34,6 +34,8 @@ export const AuthButtons: React.FC = () => {
   }
 
   return (
-    <ButtonToolbar className="justify-content-end">{buttons}</ButtonToolbar>
+    <ButtonToolbar className="ms-auto justify-content-end">
+      {buttons}
+    </ButtonToolbar>
   );
 };

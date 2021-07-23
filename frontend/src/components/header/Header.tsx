@@ -18,18 +18,13 @@ export const Header: React.FC = () => {
     <header>
       <Navbar
         fixed={!loading && !data.isLoggedIn ? "top" : undefined}
-        expand="sm"
+        expand="md"
       >
         <Container className="justify-space-between">
           <Navbar.Brand>
             <Link to="/" className={styles.Title}>
               React Notes App
             </Link>
-            {pathname.includes("/notes/") ? (
-              <Link to="/" className="ms-5">
-                <small>Back to Notes</small>
-              </Link>
-            ) : null}
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsiveAuthButtons" />
           <Navbar.Collapse
@@ -38,6 +33,11 @@ export const Header: React.FC = () => {
               " "
             )}
           >
+            {pathname.includes("/notes/") ? (
+              <Link to="/" className={styles.Back}>
+                Back to Notes
+              </Link>
+            ) : null}
             <AuthButtons />
           </Navbar.Collapse>
         </Container>
