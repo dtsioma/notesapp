@@ -7,6 +7,7 @@ import styles from "./Notes.module.css";
 import { Note, User } from "../../utils/interfaces";
 import { useNotesByCurrentAuthorQuery } from "../../generated/graphql";
 import { QueryResult } from "@apollo/client";
+import { Loading } from "../../components/general/Loading";
 
 export const Notes: React.FC = () => {
   const { data, loading }: QueryResult = useNotesByCurrentAuthorQuery();
@@ -74,7 +75,7 @@ export const Notes: React.FC = () => {
   }, [data]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading transparent fullScreen />;
   }
 
   return (
