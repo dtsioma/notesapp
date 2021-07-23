@@ -7,6 +7,7 @@ export const UsernameButton: React.FC = () => {
   const { data, loading }: QueryResult = useMeQuery();
 
   if (loading) {
+    // ok for now
     return <div></div>;
   }
 

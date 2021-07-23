@@ -21,6 +21,7 @@ export const AuthButtons: React.FC = () => {
   );
 
   if (loading) {
+    // ok for now
     return <div></div>;
   }
 

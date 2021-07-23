@@ -9,12 +9,13 @@ import { NoteDetail } from "../../views/notes/NoteDetail";
 import { Notes } from "../../views/notes/Notes";
 import { AuthRoute } from "./AuthRoute";
 import { GuardedRoute } from "./GuardedRoute";
+import { Loading } from "./Loading";
 
 export const Routes: React.FC = () => {
   const { data, loading }: QueryResult = useIsLoggedInQuery();
 
   if (loading) {
-    return <div></div>;
+    return <Loading transparent fullScreen />;
   }
 
   return (

@@ -11,6 +11,7 @@ export const Header: React.FC = () => {
   const { pathname } = useLocation();
 
   if (loading) {
+    // ok for now
     return <div></div>;
   }
 
