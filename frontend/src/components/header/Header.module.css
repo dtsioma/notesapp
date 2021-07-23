@@ -5,3 +5,9 @@
 .Title:not(:hover) {
   color: inherit;
 }
+
+@media (max-width: 575px) {
+  .AuthButtonsCollapse {
+    padding-top: 20px;
+  }
+}

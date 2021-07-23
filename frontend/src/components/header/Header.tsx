@@ -16,8 +16,11 @@ export const Header: React.FC = () => {
 
   return (
     <header>
-      <Navbar fixed={!loading && !data.isLoggedIn ? "top" : undefined}>
-        <Container>
+      <Navbar
+        fixed={!loading && !data.isLoggedIn ? "top" : undefined}
+        expand="sm"
+      >
+        <Container className="justify-space-between">
           <Navbar.Brand>
             <Link to="/" className={styles.Title}>
               React Notes App
@@ -28,7 +31,15 @@ export const Header: React.FC = () => {
               </Link>
             ) : null}
           </Navbar.Brand>
-          <AuthButtons />
+          <Navbar.Toggle aria-controls="responsiveAuthButtons" />
+          <Navbar.Collapse
+            id="responsiveAuthButtons"
+            className={["justify-content-end", styles.AuthButtonsCollapse].join(
+              " "
+            )}
+          >
+            <AuthButtons />
+          </Navbar.Collapse>
         </Container>
       </Navbar>
     </header>
