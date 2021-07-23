@@ -152,7 +152,7 @@ export type NotesByCurrentAuthorQuery = (
   { __typename?: 'Query' }
   & { notesByAuthor: Array<(
     { __typename?: 'Note' }
-    & Pick<Note, 'id' | 'title' | 'text'>
+    & Pick<Note, 'id' | 'title' | 'text' | 'dateUpdated'>
   )> }
 );
 
@@ -358,6 +358,7 @@ export const NotesByCurrentAuthorDocument = gql`
     id
     title
     text
+    dateUpdated
   }
 }
     `;

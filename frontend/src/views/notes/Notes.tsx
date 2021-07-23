@@ -10,7 +10,7 @@ import { QueryResult } from "@apollo/client";
 
 export const Notes: React.FC = () => {
   const { data, loading }: QueryResult = useNotesByCurrentAuthorQuery();
-  const [notes, setNotes] = useState<JSX.Element | null>(null);
+  const [notes, setNotes] = useState<JSX.Element[] | null>(null);
 
   console.log("notes rerender");
 
@@ -29,12 +29,19 @@ export const Notes: React.FC = () => {
     </Col>
   );
 
+  const sortNotesByNew = (a: Note, b: Note) => {
+    if (Date.parse(b.dateUpdated) > Date.parse(a.dateUpdated)) return 1;
+    else if (Date.parse(a.dateUpdated) > Date.parse(b.dateUpdated)) return -1;
+    else return 0;
+  };
+
   // rerender if notes list changed
   useEffect(() => {
     console.log(data);
     if (data && data.notesByAuthor.length !== 0) {
-      setNotes(
-        data.notesByAuthor.map((note: Note, idx: number) => (
+      const newNotes = [...data.notesByAuthor]
+        .sort(sortNotesByNew)
+        .map((note: Note, idx: number) => (
           <Col key={idx} className="col-3 mt-3">
             <Card border="primary">
               <Link to={`/notes/${note.id}`} className={styles.CardLink}>
@@ -59,8 +66,9 @@ export const Notes: React.FC = () => {
               </Link>
             </Card>
           </Col>
-        ))
-      );
+        ));
+      console.log({ newNotes });
+      setNotes(newNotes);
     }
     console.log({ notes });
   }, [data]);
@@ -91,14 +99,3 @@ export const Notes: React.FC = () => {
     </main>
   );
 };
-
-export const users: User[] = [
-  { username: "johndoe" },
-  { username: "mary_smith" },
-  { username: "christianbale" },
-  { username: "user1" },
-  { username: "user2" },
-  { username: "user3" },
-  { username: "newuser" },
-  { username: "another_user" },
-];

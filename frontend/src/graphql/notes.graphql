@@ -3,6 +3,7 @@ query NotesByCurrentAuthor {
     id
     title
     text
+    dateUpdated
   }
 }
 
