@@ -125,6 +125,9 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
   }
 
   const cancelChanges = () => {
+    if (newNote) {
+      history.replace("/");
+    }
     if (noteContent === null) {
       throw new Error("Note content is null");
     }
