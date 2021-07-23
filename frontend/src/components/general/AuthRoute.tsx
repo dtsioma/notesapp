@@ -8,7 +8,6 @@ export const AuthRoute: React.FC<RouteProps> = (props) => {
     data: { isLoggedIn },
     loading,
   }: QueryResult = useIsLoggedInQuery();
-  console.log(isLoggedIn);
   const history = useHistory();
 
   if (isLoggedIn && !loading) {

@@ -12,9 +12,6 @@ import { GuardedRoute } from "./GuardedRoute";
 
 export const Routes: React.FC = () => {
   const { data, loading }: QueryResult = useIsLoggedInQuery();
-  if (!loading) {
-    console.log(data.isLoggedIn);
-  }
 
   if (loading) {
     return <div></div>;

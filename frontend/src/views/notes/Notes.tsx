@@ -13,8 +13,6 @@ export const Notes: React.FC = () => {
   const { data, loading }: QueryResult = useNotesByCurrentAuthorQuery();
   const [notes, setNotes] = useState<JSX.Element[] | null>(null);
 
-  console.log("notes rerender");
-
   const createNoteCard = (
     <Col className="col-6">
       <Card className="text-center">
@@ -38,7 +36,6 @@ export const Notes: React.FC = () => {
 
   // rerender if notes list changed
   useEffect(() => {
-    console.log(data);
     if (data && data.notesByAuthor.length !== 0) {
       const newNotes = [...data.notesByAuthor]
         .sort(sortNotesByNew)
@@ -68,10 +65,8 @@ export const Notes: React.FC = () => {
             </Card>
           </Col>
         ));
-      console.log({ newNotes });
       setNotes(newNotes);
     }
-    console.log({ notes });
   }, [data]);
 
   if (loading) {

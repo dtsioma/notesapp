@@ -61,21 +61,6 @@ export const SignUp: React.FC = () => {
                 },
               });
             })();
-            // store.writeQuery<MeQuery>({
-            //   query: MeDocument,
-            //   data: {
-            //     me: {
-            //       id: data.register.id,
-            //       email: data.register.email,
-            //     },
-            //   },
-            // });
-            // store.writeQuery<IsLoggedInQuery>({
-            //   query: IsLoggedInDocument,
-            //   data: {
-            //     isLoggedIn: true,
-            //   },
-            // });
             history.replace("/");
           },
         });

@@ -31,7 +31,6 @@ export class UserResolver {
     }
 
     const user = await User.findOne(req.userId);
-    console.log(user);
     if (!user) {
       return null;
     }

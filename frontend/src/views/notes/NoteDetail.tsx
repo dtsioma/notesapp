@@ -66,12 +66,10 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
       setText("");
       return;
     }
-    console.log({ data, loading });
     if (data) {
       setNoteContent(data.noteById);
       setTitle(data.noteById.title);
       setText(data.noteById.text);
-      console.log("note content set successfully");
     }
     if (!data && !loading) {
       history.replace("/");
@@ -90,7 +88,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
       },
       { title, text }
     );
-    console.log(result);
     return result;
   };
 
@@ -102,15 +99,13 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
       noteContent === null ||
       (title === noteContent.title && text === noteContent.text)
     ) {
-      console.log(false);
       setIsEdited(false);
     } else {
-      console.log(true);
       setIsEdited(true);
     }
   }, [title, text, noteContent]);
 
-  // Stitch Edited/Created/Loading  in sidebar
+  // Switch Edited/Created/Loading  in sidebar
   let sidebarDate: React.ReactElement | string = "Loading...";
   if (noteContent) {
     sidebarDate = showDateEdited ? (
@@ -175,7 +170,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
         update: (store, { data }) => {
           store.reset();
           displayToast("Changes saved successfully.");
-          console.log("note edited successfully");
         },
       });
     } catch (err) {
@@ -318,7 +312,6 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({ newNote }) => {
         }}
         handleSubmit={() => {
           handleDelete();
-          console.log("note deleted");
           setShowDeleteModal(false);
         }}
       />
