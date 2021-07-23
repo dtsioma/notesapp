@@ -61,6 +61,7 @@ export const Login: React.FC = () => {
           setPasswordFeedback("Enter correct password.");
           setEmailFeedback("");
         }
+        setEmail("");
         setPassword("");
       }
     }
