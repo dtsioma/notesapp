@@ -1,16 +1,46 @@
-import React, { useContext } from "react";
+import { QueryResult } from "@apollo/client";
+import React from "react";
 import { Navbar, Container } from "react-bootstrap";
-import { AuthContext } from "../../App";
+import { Link, useLocation } from "react-router-dom";
+import { useIsLoggedInQuery } from "../../generated/graphql";
 import { AuthButtons } from "./AuthButtons";
+import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { data, loading }: QueryResult = useIsLoggedInQuery();
+  const { pathname } = useLocation();
+
+  if (loading) {
+    // ok for now
+    return <div></div>;
+  }
+
   return (
     <header>
-      <Navbar fixed={!isAuthenticated ? "top" : undefined}>
-        <Container>
-          <Navbar.Brand>React Notes App</Navbar.Brand>
-          <AuthButtons />
+      <Navbar
+        fixed={!loading && !data.isLoggedIn ? "top" : undefined}
+        expand="md"
+      >
+        <Container className="justify-space-between">
+          <Navbar.Brand>
+            <Link to="/" className={styles.Title}>
+              React Notes App
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsiveAuthButtons" />
+          <Navbar.Collapse
+            id="responsiveAuthButtons"
+            className={["justify-content-end", styles.AuthButtonsCollapse].join(
+              " "
+            )}
+          >
+            {pathname.includes("/notes/") ? (
+              <Link to="/" className={styles.Back}>
+                Back to Notes
+              </Link>
+            ) : null}
+            <AuthButtons />
+          </Navbar.Collapse>
         </Container>
       </Navbar>
     </header>

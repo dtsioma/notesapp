@@ -1,6 +1,11 @@
 .Notes {
   margin-top: 50px;
 }
+@media (max-width: 767px) {
+  .Notes {
+    margin-top: 30px;
+  }
+}
 
 .NoteText {
   line-height: 1.2em;
@@ -14,4 +19,10 @@
 
 .CardLink:hover {
   color: inherit;
+}
+
+@media (max-width: 575px) {
+  .ColumnXS {
+    flex-direction: column;
+  }
 }

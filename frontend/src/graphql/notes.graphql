@@ -1,0 +1,36 @@
+query NotesByCurrentAuthor {
+  notesByAuthor {
+    id
+    title
+    text
+    dateUpdated
+  }
+}
+
+mutation CreateNote($title: String!, $text: String!) {
+  createNote(title: $title, text: $text)
+}
+
+query getNoteById($noteId: String!) {
+  noteById(id: $noteId) {
+    id
+    title
+    text
+    authorId
+    dateCreated
+    dateUpdated
+  }
+}
+
+mutation updateNote($id: String!, $title: String!, $text: String!) {
+  updateNote(id: $id, title: $title, text: $text) {
+    title
+    text
+    dateCreated
+    dateUpdated
+  }
+}
+
+mutation deleteNote($id: String!) {
+  deleteNote(id: $id)
+}

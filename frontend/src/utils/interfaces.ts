@@ -9,16 +9,12 @@ export interface UserInShared {
 }
 
 export interface Note {
-  id: number;
+  id: string;
   title: string;
   text: string;
   dateCreated: string;
   dateUpdated: string;
   // sharedWith: UserInShared[];
-}
-
-export interface MatchParams {
-  id: string;
 }
 
 export interface User {

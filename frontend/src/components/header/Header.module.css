@@ -1,0 +1,26 @@
+.Title {
+  text-decoration: none;
+}
+
+.Title:not(:hover) {
+  color: inherit;
+}
+
+@media (max-width: 767px) {
+  .AuthButtonsCollapse {
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .Back {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+}
+@media (min-width: 768px) {
+  .Back {
+    margin-left: 50px;
+  }
+}
