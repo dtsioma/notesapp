@@ -1,6 +1,6 @@
 # React Notes App
 
-[pogoda.dtsioma.com](http://pogoda.dtsioma.com)
+[notesapp.dtsioma.com](http://notesapp.dtsioma.com)
 
 ## About
 
