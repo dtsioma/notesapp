@@ -1,6 +1,6 @@
 # React Notes App
 
-[dtsioma-notesapp.herokuapp.com](https://dtsioma-notesapp.herokuapp.com)
+[http://pogoda.dtsioma.com](http://pogoda.dtsioma.com)
 
 ## About
 
