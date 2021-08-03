@@ -4,7 +4,9 @@
 
 ## About
 
-For my first React project, I decided to create basic app for making notes. 
+For my first React project, I decided to create basic app for making notes.
+
+![Demo](https://i.imgur.com/otaxsPJ.gif)
 
 ## Tech stack
 
